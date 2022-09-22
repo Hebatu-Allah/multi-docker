@@ -1,0 +1,16 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t stephengrider/react-test -f ./clicentDockerfile.dev ./client
+
+script:
+  - docker run stephengrider/react-test  npm test -- --coverage
+
+after_success:
+  - docker build -t stephengrider/mulit-client ./client
+  - docker build -t stephengrider/mulit-nginx ./nginx
+  - docker build -t stephengrider/mulit-server ./server
+  - docker build -t stephengrider/mulit-worker ./worker
